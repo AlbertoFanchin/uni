@@ -155,6 +155,39 @@ int main() {
         outputFile << "\n";
     } else {
         outputFile << -1 << "\n";
+
+        // Scegli una stanza qualsiasi U
+        srand(static_cast<unsigned int>(time(nullptr)));
+        int indiceStanza = rand() % stanzeInCicli.size();
+        auto it = stanzeInCicli.begin();
+        std::advance(it, indiceStanza);
+        int U = *it;
+
+        outputFile << U << "\n";
+
+        // Trova un ciclo che include U
+        for (const auto& scc : sccs) {
+            if (std::find(scc.begin(), scc.end(), U) != scc.end()) {
+                outputFile << scc.size();
+                for (int stanza : scc) {
+                    outputFile << " " << stanza;
+                }
+                outputFile << "\n";
+                break;
+            }
+        }
+
+        // Trova un ciclo che non include U
+        for (const auto& scc : sccs) {
+            if (std::find(scc.begin(), scc.end(), U) == scc.end()) {
+                outputFile << scc.size();
+                for (int stanza : scc) {
+                    outputFile << " " << stanza;
+                }
+                outputFile << "\n";
+                break;
+            }
+        }
     }
 
     outputFile.close();
